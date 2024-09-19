@@ -9,21 +9,15 @@ from odf.text import P
 from openai import OpenAI
 # Implementaciones de FileProcessor y los procesadores concretos
 from abc import ABC, abstractmethod
-import logging
 import tiktoken
 client = OpenAI(
     api_key=os.environ['OPENAI_API_KEY'],  # this is also the default, it can be omitted
-)   
-
-
+) 
 
 class FileProcessor(ABC):
     @abstractmethod
     def process(self, file_path):
         pass
-
-
-import PyPDF2
 
 
 class PDFProcessor(FileProcessor):
@@ -37,10 +31,6 @@ class PDFProcessor(FileProcessor):
                     text += page_text + "\n"
         return text
 
-
-import pandas as pd
-
-
 class ExcelProcessor(FileProcessor):
     def process(self, file_path):
         text = ""
@@ -50,10 +40,6 @@ class ExcelProcessor(FileProcessor):
             text += df.to_string(index=False, header=False) + "\n"
         return text
 
-
-from docx import Document
-
-
 class WordProcessor(FileProcessor):
     def process(self, file_path):
         text = ""
@@ -61,11 +47,6 @@ class WordProcessor(FileProcessor):
         for para in doc.paragraphs:
             text += para.text + "\n"
         return text
-
-
-from odf.opendocument import load
-from odf.text import P
-
 
 class ODTProcessor(FileProcessor):
     def process(self, file_path):
@@ -105,6 +86,8 @@ class Vectorizer:
     def vectorize(self, text):
         segments = self.split_text(text)
         collection = self.chroma_client.get_or_create_collection(name="my_collection")
+        
+
         for idx, segment in enumerate(segments):
             # Generar el embedding usando el método actualizado
             response = client.embeddings.create(

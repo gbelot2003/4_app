@@ -10,17 +10,19 @@ load_dotenv()  # take environment variables from .env.
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey!"
-socketio = SocketIO(app)
 
 chroma_client = chromadb.Client()
-vectorization_module = FileVectorizationModule(chroma_client)
-    
 # Ruta al archivo que deseas procesar
 file_path = 'files/Encomiendas_Express-B.pdf'
-    
+
+vectorization_module = FileVectorizationModule(chroma_client)
+print("llega")
+
 # Procesar y vectorizar el archivo
 vectorization_module.process_file(file_path)
 
+
+socketio = SocketIO(app)
 configure_routes(app, socketio)
 
 if __name__ == "__main__":
