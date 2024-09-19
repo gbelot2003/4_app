@@ -1,0 +1,133 @@
+/* Configuración básica del cuerpo */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Contenedor principal del chat */
+.chat-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título del chat */
+.chat-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Caja de mensajes */
+.chat-box {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo para las burbujas de mensajes */
+.message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 80%;
+    font-size: 14px;
+    line-height: 1.5;
+    position: relative;
+}
+
+/* Estilo para los mensajes del usuario */
+.message.user {
+    background-color: #d1e7dd;
+    align-self: flex-end;
+    color: #0f5132;
+    border-top-right-radius: 0;
+}
+
+/* Estilo para los mensajes de otros */
+.message.other {
+    background-color: #e2e3e5;
+    align-self: flex-start;
+    color: #383d41;
+    border-top-left-radius: 0;
+}
+
+/* Campo de texto */
+#message {
+    width: calc(100% - 50px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Efecto de enfoque en el campo de texto */
+#message:focus {
+    border-color: #6c757d;
+}
+
+/* Botón de envío */
+#send-btn {
+    padding: 10px;
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto al pasar el mouse sobre el botón */
+#send-btn:hover {
+    background-color: #157347;
+}
+
+/* Efecto de scroll automático para la caja de chat */
+.chat-box {
+    scroll-behavior: smooth;
+}
+
+/* Mejoras para la barra de desplazamiento */
+.chat-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsividad */
+@media screen and (max-width: 600px) {
+    .chat-container {
+        width: 90%;
+        height: 90%;
+    }
+}
