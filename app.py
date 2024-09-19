@@ -13,4 +13,4 @@ socketio = SocketIO(app)
 configure_routes(app, socketio)
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, debug=True)
