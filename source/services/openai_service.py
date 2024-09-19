@@ -30,7 +30,7 @@ class OpenAIService:
             input=user_input,
             model="text-embedding-ada-002"
         )
-        query_embedding = embedding_response['data'][0]['embedding']
+        query_embedding = embedding_response.data[0].embedding
 
         # Realizar la consulta en ChromaDB
         results = self.collection.query(
