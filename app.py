@@ -11,13 +11,11 @@ load_dotenv()  # take environment variables from .env.
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "supersecretkey!"
 
-chroma_client = chromadb.Client()
+chroma_client = chromadb.EphemeralClient()
 # Ruta al archivo que deseas procesar
 file_path = 'files/Encomiendas_Express-B.pdf'
 
 vectorization_module = FileVectorizationModule(chroma_client)
-print("llega")
-
 # Procesar y vectorizar el archivo
 vectorization_module.process_file(file_path)
 
