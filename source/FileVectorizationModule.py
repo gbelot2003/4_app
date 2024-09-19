@@ -7,6 +7,8 @@ from docx import Document
 from odf.opendocument import load
 from odf.text import P
 from openai import OpenAI
+from pymilvus import model
+
 # Implementaciones de FileProcessor y los procesadores concretos
 from abc import ABC, abstractmethod
 import tiktoken
@@ -84,17 +86,23 @@ class Vectorizer:
         self.max_tokens = 8192  # Límite de tokens para el modelo text-embedding-ada-002
 
     def vectorize(self, text):
+        openai_ef = model.dense.OpenAIEmbeddingFunction(
+            model_name="text-embedding-ada-002",
+            dimensions=512
+        )
         segments = self.split_text(text)
-        collection = self.chroma_client.get_or_create_collection(name="my_collection")
+        collection = self.chroma_client.get_collection(name="my_collection")
         
 
         for idx, segment in enumerate(segments):
             # Generar el embedding usando el método actualizado
             response = client.embeddings.create(
                 input=segment,
-                model="text-embedding-ada-002"
+                model="text-embedding-ada-002",
             )
             embedding = response.data[0].embedding
+
+            print(f"idx: {idx+1}")
 
             # Almacenar el embedding en ChromaDB
             collection.add(
@@ -102,7 +110,15 @@ class Vectorizer:
                 documents=[segment],
                 embeddings=[embedding]
             )
-            print(f"Segmento {idx+1} almacenado en ChromaDB")
+            results = collection.query(
+                query_texts=["What is the student name?"],
+                n_results=1
+            )
+
+            print(f"resultados: {results}")
+            #print(f"Segmento {idx+1} almacenado en ChromaDB")
+
+
 
 
     def split_text(self, text):
@@ -121,6 +137,7 @@ class FileVectorizationModule:
 
     def process_file(self, file_path):
         _, ext = os.path.splitext(file_path)
+        print(f"archivo: {file_path}")
         processor = FileProcessorFactory.get_processor(ext)
         text = processor.process(file_path)
         self.vectorizer.vectorize(text)

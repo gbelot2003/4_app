@@ -3,3 +3,4 @@ venv
 __pycache__
 source/__pycache__
 files/*
+chroma/*

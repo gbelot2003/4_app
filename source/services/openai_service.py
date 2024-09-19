@@ -17,7 +17,7 @@ class OpenAIService:
         # Inicializar el cliente de ChromaDB
         self.chroma_client = chromadb.PersistentClient(path="./chroma")
         # Acceder a la colección
-        self.collection = self.chroma_client.get_or_create_collection(name="my_collection")
+        self.collection = self.chroma_client.create_collection(name="my_collection")
 
 
     def add_message(self, role, content):
@@ -72,10 +72,16 @@ class OpenAIService:
         # Agregar el historial de mensajes
         messages.extend(self.messages)
 
+
+        # Recuperamos el contenido almacenado en ChromaDB
+        contenido_archivos = self.obtener_contenido_desde_chroma()
+
+        mensaje_completo = f"{contenido_archivos}\n{user_message}"
+
         response = client.chat.completions.create(
             model='gpt-3.5-turbo',  # Specify the model
             messages=[
-                {"role": "user", "content": user_message}
+                {"role": "user", "content": mensaje_completo}
             ],
             max_tokens=150,  # Adjust token count as needed
             temperature=0.1  # Adjust temperature for variability
@@ -86,3 +92,18 @@ class OpenAIService:
 
         self.add_message('assistant', assistant_message)
         return assistant_message
+    
+
+    def obtener_contenido_desde_chroma(self):
+        """
+        Recupera todo el contenido guardado en ChromaDB.
+        """
+        try:
+            results = self.collection.get()
+            contenidos = [doc for doc in results["documents"]]
+            #print(f"Contenido recuperado de ChromaDB: {contenidos}")
+            print("ejecutando obtener_contenido_desde_chroma")
+            return "\n".join(contenidos)
+        except Exception as e:
+            print(f"Error al recuperar contenido de ChromaDB: {e}")
+            return f"Error al recuperar contenido de ChromaDB: {e}"
